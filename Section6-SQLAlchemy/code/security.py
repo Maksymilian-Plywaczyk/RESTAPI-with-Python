@@ -1,4 +1,4 @@
-from resources.user import User
+from models.user import UserModel
 
 # retrieve users by username
 # username_mapping = {u.username: u for u in users}  # dict comprehension {key: value  for vars in sequence}
@@ -9,7 +9,7 @@ from resources.user import User
 
 def Authenticate(username, password):
     # retrieve user object using find_by_username from User class
-    user = User.find_by_username(username)  # default value set to None
+    user = UserModel.find_by_username(username)  # default value set to None
     # compare user.password == password passing
     if user and user.password == password:
         return user
@@ -20,4 +20,4 @@ def Authenticate(username, password):
 def Identity(payload):
     # payload is the contents of the JWT Token
     user_id = payload['identity']
-    return User.find_by_id(user_id)
+    return UserModel.find_by_id(user_id)
