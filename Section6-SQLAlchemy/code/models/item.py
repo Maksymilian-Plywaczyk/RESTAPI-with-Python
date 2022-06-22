@@ -1,7 +1,14 @@
 import sqlite3
+from db import db
 
 
-class ItemModel:
+class ItemModel(db.Model):  # this ItemModel is thing that we are going to be saving to a database
+    __tablename__ = 'items'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80))
+    price = db.Column(db.Float(precision=2))
+
     def __init__(self, name, price):
         self.name = name
         self.price = price
@@ -19,7 +26,7 @@ class ItemModel:
         row = result.fetchone()
         connection.close()
         if row is not None:
-            #cls calls to ItemModel
+            # cls calls to ItemModel
             return cls(row[0], row[1])
 
     def insert(self):

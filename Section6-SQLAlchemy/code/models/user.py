@@ -1,10 +1,22 @@
 import sqlite3
 
 # User class is not the resource, only RegisterUser is resource
-class UserModel:
+import sqlite3
+from db import db
+
+
+class UserModel(
+    db.Model):  # this UserModel is thing that we are going to be saving to a database, create mapping between database and these objects
+    __tablename__ = 'users'
+
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80))
+    password = db.Column(db.String(80))
+    something = 'hi something'
+
     def __init__(self, _id, username, password):
         # using _id because id is a Python Keyword and we don't want to use that as a variable name
-        self.id = _id
+        self.id = _id  # self.parameter is the instance of class attribute
         self.username = username
         self.password = password
 

@@ -14,9 +14,10 @@ class Item(Resource):
     def get(self, name):  # get method is GET HTTP Method
         try:
             item = ItemModel.find_by_itemName(name)
+            return item.json()
         except:
             return {'message': 'Item not found'}, 404
-        return item.json()
+
 
     def post(self, name):
         if ItemModel.find_by_itemName(name):
