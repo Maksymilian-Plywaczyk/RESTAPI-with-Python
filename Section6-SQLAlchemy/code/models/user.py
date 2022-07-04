@@ -20,39 +20,19 @@ class UserModel(
         self.username = username
         self.password = password
 
+    def save_to_db(self):
+        try:
+            db.session.add(self)
+        except:
+            db.rollback()
+            raise
+        else:
+            db.session.commit()
     @classmethod
     # that means we are using the current class, not hard coding User class name
     def find_by_username(cls, username):
-        connection = sqlite3.connect('database.db')
-        cursor = connection.cursor()
-
-        # part WHERE username=? is the part of filtering the results. It is going to limit the selection to be only
-        # this rows to the username matches the parameter
-        query = "SELECT * FROM users WHERE username=?"
-        result = cursor.execute(query, (username,))
-        row = result.fetchone()  # gives us first row out of the result set
-        if row is not None:
-            user = cls(row[0], row[1], row[2])  # create the user from that row
-        else:
-            user = None
-            # we don't have to commit, because we didn't add any data
-        connection.close()
-        return user
+        return cls.query.filter_by(username=username).first()
 
     @classmethod
     def find_by_id(cls, _id):
-        connection = sqlite3.connect('database.db')
-        cursor = connection.cursor()
-
-        # part WHERE username=? is the part of filtering the results. It is going to limit the selection to be only
-        # this rows to the username matches the parameter
-        query = "SELECT * FROM users WHERE id=?"
-        result = cursor.execute(query, (_id,))
-        row = result.fetchone()  # gives us first row out of the result set
-        if row is None:
-            user = None
-        else:
-            user = cls(row[0], row[1], row[2])  # create the user from that row
-        # we don't have to commit, because we didn't add any data
-        connection.close()
-        return user
+        return cls.query.filter_by(id=_id).first()

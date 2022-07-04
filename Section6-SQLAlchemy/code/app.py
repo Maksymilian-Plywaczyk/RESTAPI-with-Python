@@ -2,7 +2,7 @@ from flask import Flask
 from flask_restful import Api
 from flask_jwt import JWT
 from security import Authenticate, Identity
-from resources.items import Item, ItemList
+from resources.item import Item, ItemList
 from resources.user import UserRegister
 from datetime import timedelta
 from db import db
