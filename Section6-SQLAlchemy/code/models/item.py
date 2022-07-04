@@ -1,4 +1,3 @@
-import sqlite3
 from db import db
 
 
@@ -6,41 +5,34 @@ class ItemModel(db.Model):  # this ItemModel is thing that we are going to be sa
     __tablename__ = 'items'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80))
+    itemname = db.Column(db.String(80))
     price = db.Column(db.Float(precision=2))
 
-    def __init__(self, name, price):
-        self.name = name
+    def __init__(self, itemname, price):
+        self.itemname = itemname
         self.price = price
 
     def json(self):
-        return {'name': self.name, 'price': self.price}
+        return {'name': self.itemname, 'price': self.price}
 
     @classmethod
     def find_by_itemName(cls, name):
-        connection = sqlite3.connect('database.db')
-        cursor = connection.cursor()
+        return cls.query.filter_by(itemname=name).first()  # Do the same like SELECT * FROM items WHERE name=name LIMIT 1
 
-        query = "SELECT * FROM items WHERE name=?"
-        result = cursor.execute(query, (name,))
-        row = result.fetchone()
-        connection.close()
-        if row is not None:
-            # cls calls to ItemModel
-            return cls(row[0], row[1])
+    def save_to_db(self):
+        try:
+            db.session.add(self)  # This method save item to database and update it
+        except:
+            db.session.rollback()
+            raise
+        else:
+            db.session.commit()
 
-    def insert(self):
-        connection = sqlite3.connect('database.db')
-        cursor = connection.cursor()
-        query = "INSERT INTO items VALUES(?,?)"
-        cursor.execute(query, (self.name, self.price))
-        connection.commit()
-        connection.close()
-
-    def update(self):
-        connection = sqlite3.connect('database.db')
-        cursor = connection.cursor()
-        query = "UPDATE items SET price=? WHERE name=?"
-        cursor.execute(query, (self.price, self.name))
-        connection.commit()
-        connection.close()
+    def delete_from_db(self):
+        try:
+            db.session.delete(self)
+        except:
+            db.session.rollback()
+            raise
+        else:
+            db.session.commit()

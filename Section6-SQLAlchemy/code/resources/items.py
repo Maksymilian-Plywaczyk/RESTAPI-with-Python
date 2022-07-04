@@ -18,7 +18,6 @@ class Item(Resource):
         except:
             return {'message': 'Item not found'}, 404
 
-
     def post(self, name):
         if ItemModel.find_by_itemName(name):
             return {'message': 'Item already exists'}
@@ -29,39 +28,29 @@ class Item(Resource):
         # request_data is dictionary
         item = ItemModel(name, data['price'])
         try:
-            item.insert()
+            item.save_to_db()
         except:
             return {'message': 'Something goes wrong with insert'}
         return item.json(), 201  # Tell the client that we have processed this, we have created this item and added it to
         # our database (list of item)
 
     def delete(self, name):
-        if ItemModel.find_by_itemName(name) is None:
-            return {'message':'Cannot deleted no existing item'}
-        connection = sqlite3.connect('database.db')
-        cursor = connection.cursor()
-        query = "DELETE FROM items WHERE name=?"
-        cursor.execute(query, (name,))
-        connection.commit()
-        connection.close()
-        return {'message': 'item  successfully deleted'}
+        item = ItemModel.find_by_itemName(name)
+        if item:
+            item.delete_from_db()
+        return {'message': 'Item deleted'}
 
     def put(self, name):
 
         data = Item.parser.parse_args()
         item = ItemModel.find_by_itemName(name)
-        update_item = ItemModel(name, data['price'])
+
         if item is None:
-            try:
-                update_item.insert()
-            except:
-                return {'message': 'Something goes wrong with inserting new item'}, 500
+            item = ItemModel(name,data['price'])
         else:
-            try:
-                update_item.update()
-            except:
-                return {'message': 'Something goes wrong with updating item'}, 500
-        return update_item.json()
+            item.price = data['price']
+        item.save_to_db()
+        return item.json()
 
 
 class ItemList(Resource):

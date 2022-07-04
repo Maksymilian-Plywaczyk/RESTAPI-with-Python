@@ -7,11 +7,10 @@ from resources.user import UserRegister
 from datetime import timedelta
 from db import db
 
-
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.secret_key = "maks"  # that has be secret, is used to ecrypt the JWT.
 api = Api(app)  # that is just going to allow us to very easily add these resources to it.
-
 
 # changing /auth to /login, we need to do this before creating the JWT instance it is important
 app.config['JWT_AUTH_URL_RULE'] = '/login'
