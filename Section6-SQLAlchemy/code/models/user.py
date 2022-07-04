@@ -14,9 +14,8 @@ class UserModel(
     password = db.Column(db.String(80))
     something = 'hi something'
 
-    def __init__(self, _id, username, password):
+    def __init__(self, username, password):
         # using _id because id is a Python Keyword and we don't want to use that as a variable name
-        self.id = _id  # self.parameter is the instance of class attribute
         self.username = username
         self.password = password
 

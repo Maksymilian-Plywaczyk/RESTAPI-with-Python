@@ -8,6 +8,7 @@ from models.item import ItemModel
 class Item(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('price', type=float, required=True, help="This field cannot be left blank")
+    parser.add_argument('store_id', type=int, required=True, help="Every item needs a store id")
 
     @jwt_required()  # when the user is not log in doesn't pass JWT token we cannot get this method
     def get(self, name):  # get method is GET HTTP Method
@@ -25,7 +26,7 @@ class Item(Resource):
         # request_data = request.get_json()  # if content-type is not Json and you put wrong type (not JSON) it gives
         # you an error
         # request_data is dictionary
-        item = ItemModel(name, data['price'])
+        item = ItemModel(name, data['price'], data['store_id']) 
         try:
             item.save_to_db()
         except:
@@ -45,7 +46,7 @@ class Item(Resource):
         item = ItemModel.find_by_itemName(name)
 
         if item is None:
-            item = ItemModel(name, data['price'])
+            item = ItemModel(name, data['price'], data['store_id'])
         else:
             item.price = data['price']
         item.save_to_db()

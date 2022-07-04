@@ -8,7 +8,7 @@ from datetime import timedelta
 from db import db
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 app.secret_key = "maks"  # that has be secret, is used to ecrypt the JWT.
 api = Api(app)  # that is just going to allow us to very easily add these resources to it.
 
@@ -16,6 +16,13 @@ api = Api(app)  # that is just going to allow us to very easily add these resour
 app.config['JWT_AUTH_URL_RULE'] = '/login'
 app.config['JWT_EXPIRATION_DELTA'] = timedelta(seconds=1800)
 app.config['SQLAlCHEMY_TRACK_MODIFICATIONS'] = False
+
+
+@app.before_first_request
+def create_tables():
+    db.create_all()
+
+
 jwt = JWT(app, Authenticate, Identity)  # /auth
 
 # name in this <string:name> is going to name of our dictionary {'student':name}

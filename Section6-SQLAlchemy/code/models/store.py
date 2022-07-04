@@ -1,25 +1,21 @@
 from db import db
 
 
-class ItemModel(db.Model):  # this ItemModel is thing that we are going to be saving to a database
-    __tablename__ = 'items'
+class StoreModel(db.Model):  # this ItemModel is thing that we are going to be saving to a database
+    __tablename__ = 'stores'
 
     id = db.Column(db.Integer, primary_key=True)
-    itemname = db.Column(db.String(80))
-    price = db.Column(db.Float(precision=2))
+    storename = db.Column(db.String(80))
 
-    # Putting the foreign key on the child (item) table referencing the parent.relationship() (store)
-    # In this case we have a relationship one-to-many it means one store(parent) can have many items(children)
-    store_id = db.Column(db.Integer, db.ForeignKey('stores.id'))
-    store = db.relationship('StoreModel')
+    items = db.relationship('ItemModel',
+                            lazy='dynamic')  # lazy = 'dynamic' change our item variable from list o query object
 
-    def __init__(self, itemname, price,store_id):
-        self.itemname = itemname
+    def __init__(self, itemname, price):
+        self.storename = itemname
         self.price = price
-        self.store_id = store_id
 
     def json(self):
-        return {'name': self.itemname, 'price': self.price}
+        return {'name': self.storename, 'items': [items.json() for items in self.items.all()]}
 
     @classmethod
     def find_by_itemName(cls, name):
