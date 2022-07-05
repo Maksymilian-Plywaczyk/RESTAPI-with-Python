@@ -20,6 +20,7 @@ app.config['SQLAlCHEMY_TRACK_MODIFICATIONS'] = False
 
 @app.before_first_request
 def create_tables():
+    # create all tables in our Database for us
     db.create_all()
 
 

@@ -18,7 +18,7 @@ class StoreModel(db.Model):  # this ItemModel is thing that we are going to be s
         return {'name': self.storename, 'items': [items.json() for items in self.items.all()]}
 
     @classmethod
-    def find_by_itemName(cls, name):
+    def find_by_storeName(cls, name):
         return cls.query.filter_by(
             itemname=name).first()  # Do the same like SELECT * FROM items WHERE name=name LIMIT 1
 
