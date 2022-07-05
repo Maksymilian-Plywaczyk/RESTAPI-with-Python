@@ -29,3 +29,8 @@ class Store(Resource):
             return {'message': 'Store successfuly deleted'}
         else:
             return {'message': "Store '{}' doesn't exists".format(name)}
+
+
+class StoreList(Resource):
+    def get(self):
+        return {'stores': [store.json() for store in StoreModel.query.all()]}

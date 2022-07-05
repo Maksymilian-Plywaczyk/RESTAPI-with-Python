@@ -5,6 +5,7 @@ from security import Authenticate, Identity
 from resources.item import Item, ItemList
 from resources.user import UserRegister
 from datetime import timedelta
+from resources.store import Store, StoreList
 from db import db
 
 app = Flask(__name__)
@@ -27,8 +28,10 @@ def create_tables():
 jwt = JWT(app, Authenticate, Identity)  # /auth
 
 # name in this <string:name> is going to name of our dictionary {'student':name}
+api.add_resource(Store, '/store/<string:name>')
 api.add_resource(Item, '/item/<string:name>')  # http://127.0.0.1:5000/item/Maks(<string:name>)
 api.add_resource(ItemList, '/items')
+api.add_resource(StoreList, '/stores')
 api.add_resource(UserRegister, '/register')
 if __name__ == '__main__':
     db.init_app(app)
