@@ -24,7 +24,7 @@ class ItemModel(db.Model):  # this ItemModel is thing that we are going to be sa
     @classmethod
     def find_by_itemName(cls, name):
         return cls.query.filter_by(
-            itemname=name).first()  # Do the same like SELECT * FROM items WHERE name=name LIMIT 1
+            itemName=name).first()  # Do the same like SELECT * FROM items WHERE name=name LIMIT 1
 
     def save_to_db(self):
         try:
