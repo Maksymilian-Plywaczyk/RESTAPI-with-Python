@@ -5,17 +5,16 @@ class StoreModel(db.Model):  # this ItemModel is thing that we are going to be s
     __tablename__ = 'stores'
 
     id = db.Column(db.Integer, primary_key=True)
-    storename = db.Column(db.String(80))
+    storeName = db.Column(db.String(80))
 
     items = db.relationship('ItemModel',
                             lazy='dynamic')  # lazy = 'dynamic' change our item variable from list o query object
 
-    def __init__(self, itemname, price):
-        self.storename = itemname
-        self.price = price
+    def __init__(self, storeName):
+        self.storeName = storeName
 
     def json(self):
-        return {'name': self.storename, 'items': [items.json() for items in self.items.all()]}
+        return {'name': self.storeName, 'items': [items.json() for items in self.items.all()]}
 
     @classmethod
     def find_by_storeName(cls, name):

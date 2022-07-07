@@ -5,7 +5,7 @@ class ItemModel(db.Model):  # this ItemModel is thing that we are going to be sa
     __tablename__ = 'items'
 
     id = db.Column(db.Integer, primary_key=True)
-    itemname = db.Column(db.String(80))
+    itemName = db.Column(db.String(80))
     price = db.Column(db.Float(precision=2))
 
     # Putting the foreign key on the child (item) table referencing the parent.relationship() (store)
@@ -13,13 +13,13 @@ class ItemModel(db.Model):  # this ItemModel is thing that we are going to be sa
     store_id = db.Column(db.Integer, db.ForeignKey('stores.id'))
     store = db.relationship('StoreModel')
 
-    def __init__(self, itemname, price,store_id):
-        self.itemname = itemname
+    def __init__(self, itemName, price,store_id):
+        self.itemName = itemName
         self.price = price
         self.store_id = store_id
 
     def json(self):
-        return {'name': self.itemname, 'price': self.price}
+        return {'name': self.itemName, 'price': self.price}
 
     @classmethod
     def find_by_itemName(cls, name):

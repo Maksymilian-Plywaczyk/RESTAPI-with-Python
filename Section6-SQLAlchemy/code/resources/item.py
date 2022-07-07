@@ -2,6 +2,7 @@ from flask_restful import Resource, reqparse
 from flask_jwt import jwt_required
 from models.item import ItemModel
 
+#TODO Keep deploying app with Heroko
 
 # Every Resource has to be a class
 # Item class is CRUD APIs (create,read,update,delete)
@@ -26,7 +27,7 @@ class Item(Resource):
         # request_data = request.get_json()  # if content-type is not Json and you put wrong type (not JSON) it gives
         # you an error
         # request_data is dictionary
-        item = ItemModel(name, data['price'], data['store_id']) 
+        item = ItemModel(name, data['price'], data['store_id'])
         try:
             item.save_to_db()
         except:
