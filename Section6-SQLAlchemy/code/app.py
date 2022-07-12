@@ -1,15 +1,16 @@
 from flask import Flask
 from flask_restful import Api
 from flask_jwt import JWT
-from security import Authenticate, Identity
+from security import authenticate, identity
 from resources.item import Item, ItemList
 from resources.user import UserRegister
 from datetime import timedelta
 from resources.store import Store, StoreList
 from db import db
+import os
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('MY DATA BASE FROM HEROKO ', 'sqlite:///data.db')
 app.secret_key = "maks"  # that has be secret, is used to ecrypt the JWT.
 api = Api(app)  # that is just going to allow us to very easily add these resources to it.
 
@@ -25,7 +26,7 @@ def create_tables():
     db.create_all()
 
 
-jwt = JWT(app, Authenticate, Identity)  # /auth
+jwt = JWT(app, authenticate, identity)  # /auth but in our case /login
 
 # name in this <string:name> is going to name of our dictionary {'student':name}
 api.add_resource(Store, '/store/<string:name>')

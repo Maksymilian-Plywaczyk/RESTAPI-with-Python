@@ -5,9 +5,7 @@ from models.user import UserModel
 #
 # # retrieve users by id
 # userid_mapping = {u.id: u for u in users}
-
-
-def Authenticate(username, password):
+def authenticate(username, password):
     # retrieve user object using find_by_username from User class
     user = UserModel.find_by_username(username)  # default value set to None
     # compare user.password == password passing
@@ -17,7 +15,7 @@ def Authenticate(username, password):
     # return user
 
 
-def Identity(payload):
+def identity(payload):
     # payload is the contents of the JWT Token
     user_id = payload['identity']
     return UserModel.find_by_id(user_id)
